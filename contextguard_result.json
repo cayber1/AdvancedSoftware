@@ -1,0 +1,116 @@
+{
+  "query": "How tall is the Eiffel Tower and where is it located?",
+  "answer": "The Eiffel Tower is 330 meters tall and is located in Paris, France.",
+  "retrieved_context": [
+    "The Eiffel Tower is located in Paris, France. It was built in 1889 by Gustave Eiffel.",
+    "The Eiffel Tower stands 330 meters tall and attracts millions of tourists each year.",
+    "Paris is the capital of France and has a population of over 2 million people in the city proper."
+  ],
+  "validation": {
+    "hallucination_risk": 0.0,
+    "cis_score": 1.0,
+    "similarity_score": 0.6252331666148279,
+    "unsupported_claims": [],
+    "verdict": "GROUNDED"
+  },
+  "robustness": {
+    "robustness_score": 0.8045307318903747,
+    "num_trials": 3,
+    "trials": [
+      {
+        "trial": 1,
+        "injected": "The Eiffel Tower is actually in London, not Paris.",
+        "robustness": 0.5565020231835927
+      },
+      {
+        "trial": 2,
+        "injected": "Recent studies show that water boils at 200 degrees Celsius at sea level.",
+        "robustness": 1.0
+      },
+      {
+        "trial": 3,
+        "injected": "The Great Wall of China is only 100 miles long.",
+        "robustness": 0.8570901724875316
+      }
+    ]
+  },
+  "metrics": {
+    "hallucination_rate": 0.0,
+    "cis_score": 1.0,
+    "cue_score": 1.0,
+    "robustness_score": 0.8045307318903747,
+    "overall_score": 0.960906146378075
+  },
+  "mcp_log": [
+    {
+      "event_id": "1b762a09",
+      "agent": "ContextRetrievalAgent",
+      "action": "rank_context",
+      "timestamp": 1778164245.2146015,
+      "status": "ok",
+      "message": "",
+      "input_preview": "{'query': 'How tall is the Eiffel Tower and where is it located?', 'num_docs': 6}",
+      "output_preview": "{'top_k': 3}"
+    },
+    {
+      "event_id": "ab7c15ba",
+      "agent": "ReasoningAgent",
+      "action": "call_llm",
+      "timestamp": 1778164245.8050935,
+      "status": "ok",
+      "message": "",
+      "input_preview": "{'query': 'How tall is the Eiffel Tower and where is it located?', 'context_docs': 3}",
+      "output_preview": "{'answer_length': 68}"
+    },
+    {
+      "event_id": "98e48fde",
+      "agent": "GroundingValidatorAgent",
+      "action": "compute_similarity",
+      "timestamp": 1778164246.1620588,
+      "status": "ok",
+      "message": "",
+      "input_preview": "{'answer_len': 68, 'context_len': 267}",
+      "output_preview": "{'hallucination_risk': 0.0, 'cis_score': 1.0, 'similarity_score': 0.6252331666148279, 'unsupported_claims': [], 'verdict"
+    },
+    {
+      "event_id": "dfac2334",
+      "agent": "ReasoningAgent",
+      "action": "call_llm",
+      "timestamp": 1778164247.052498,
+      "status": "ok",
+      "message": "",
+      "input_preview": "{'query': 'How tall is the Eiffel Tower and where is it located?', 'context_docs': 4}",
+      "output_preview": "{'answer_length': 616}"
+    },
+    {
+      "event_id": "e89bcb3a",
+      "agent": "ReasoningAgent",
+      "action": "call_llm",
+      "timestamp": 1778164247.1921163,
+      "status": "ok",
+      "message": "",
+      "input_preview": "{'query': 'How tall is the Eiffel Tower and where is it located?', 'context_docs': 4}",
+      "output_preview": "{'answer_length': 76}"
+    },
+    {
+      "event_id": "ded80cd0",
+      "agent": "ReasoningAgent",
+      "action": "call_llm",
+      "timestamp": 1778164247.3206987,
+      "status": "ok",
+      "message": "",
+      "input_preview": "{'query': 'How tall is the Eiffel Tower and where is it located?', 'context_docs': 4}",
+      "output_preview": "{'answer_length': 68}"
+    },
+    {
+      "event_id": "b9c25bfc",
+      "agent": "AdversarialTesterAgent",
+      "action": "inject_adversarial",
+      "timestamp": 1778164247.321791,
+      "status": "ok",
+      "message": "",
+      "input_preview": "{'num_trials': 3, 'query': 'How tall is the Eiffel Tower and where is it located?'}",
+      "output_preview": "{'avg_robustness': 0.8045307318903747}"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "query": "What is the height of the Eiffel Tower?",
+    "A_baseline_rag": {
+      "accuracy": 1.0
+    },
+    "B_single_agent": {
+      "accuracy": 0.5
+    },
+    "C_multiagent_no_mcp": {
+      "accuracy": 1.0
+    },
+    "D_contextguard": {
+      "accuracy": 1.0,
+      "hallucination_rate": 0.0,
+      "cis_score": 1.0,
+      "cue_score": 0.6666666666666666,
+      "robustness_score": 0.7985389942812023,
+      "overall_score": 0.8930411321895737
+    }
+  },
+  {
+    "query": "At what temperature does water boil?",
+    "A_baseline_rag": {
+      "accuracy": 1.0
+    },
+    "B_single_agent": {
+      "accuracy": 1.0
+    },
+    "C_multiagent_no_mcp": {
+      "accuracy": 1.0
+    },
+    "D_contextguard": {
+      "accuracy": 1.0,
+      "hallucination_rate": 0.0,
+      "cis_score": 1.0,
+      "cue_score": 0.6666666666666666,
+      "robustness_score": 0.797415179844545,
+      "overall_score": 0.8928163693022423
+    }
+  },
+  {
+    "query": "Who built the Great Wall of China?",
+    "A_baseline_rag": {
+      "accuracy": 1.0
+    },
+    "B_single_agent": {
+      "accuracy": 1.0
+    },
+    "C_multiagent_no_mcp": {
+      "accuracy": 1.0
+    },
+    "D_contextguard": {
+      "accuracy": 1.0,
+      "hallucination_rate": 0.5,
+      "cis_score": 0.5,
+      "cue_score": 1.0,
+      "robustness_score": 0.9404367190192655,
+      "overall_score": 0.6880873438038531
+    }
+  }
+]
