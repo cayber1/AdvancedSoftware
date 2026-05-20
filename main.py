@@ -1,115 +1,157 @@
 """
-ContextGuard: Multi-Agent MCP Framework for Context Integrity Verification
-Group 2 - Diyar Buyuksahin, Etem Tolga Erten, Süleyman Kılıç, Andrew Mabuto
+ContextGuard — Main Pipeline
+Group 2: Diyar Buyuksahin, Etem Tolga Erten, Süleyman Kılıç, Andrew Mabuto
+
+Full pipeline:
+  [1] Context Retrieval Agent   — ranks & filters docs, commits to ContextStore
+  [2] Reasoning Agent           — generates context-grounded answer
+  [3] Grounding Validator Agent — verifies grounding (3-layer check)
+  [4] Adversarial Tester Agent  — LLM-crafted injections → robustness score
+
+All steps are governed by MCPGovernance (RBAC + schema validation + logging).
 """
 
-import os
 import json
-import time
+import os
+import sys
+
 from contextguard.mcp_governance import MCPGovernance
+from contextguard.context_store import ContextStore
 from contextguard.agents import (
     ContextRetrievalAgent,
     ReasoningAgent,
     GroundingValidatorAgent,
     AdversarialTesterAgent,
 )
-from contextguard.metrics import evaluate_response
+from contextguard.metrics import evaluate_response, format_report
 
 
-def run_contextguard_pipeline(query: str, context_documents: list[str]) -> dict:
+def run_contextguard_pipeline(
+    query: str,
+    context_documents: list[str],
+    num_adversarial_trials: int = 3,
+    verbose_mcp: bool = False,
+) -> dict:
     """
-    Full ContextGuard pipeline:
-    1. Context Retrieval Agent ranks & filters docs
-    2. Reasoning Agent generates answer
-    3. Grounding Validator verifies grounding
-    4. Adversarial Tester checks robustness
+    Execute the full ContextGuard multi-agent pipeline.
+
+    Parameters
+    ----------
+    query                  : The user question
+    context_documents      : Candidate document pool
+    num_adversarial_trials : How many adversarial injections to test
+    verbose_mcp            : If True, print MCP log details
+
+    Returns
+    -------
+    Comprehensive result dict including answer, all metrics, MCP log,
+    ContextStore history, and formal risk model output.
     """
 
-    mcp = MCPGovernance()
+    mcp   = MCPGovernance()
+    store = ContextStore()
 
-    print("\n" + "=" * 60)
-    print("ContextGuard Pipeline Starting")
-    print("=" * 60)
-    print(f"Query: {query}\n")
+    print("\n" + "═" * 62)
+    print("  ContextGuard — Multi-Agent MCP Pipeline")
+    print("═" * 62)
+    print(f"  Query: {query}\n")
 
-    # Step 1: Context Retrieval
-    print("[Agent 1] Context Retrieval Agent...")
-    retrieval_agent = ContextRetrievalAgent(mcp)
-    retrieved_context = retrieval_agent.retrieve_and_rank(query, context_documents)
-    print(f"  Retrieved {len(retrieved_context)} relevant context segments.\n")
+    # ── Step 1: Context Retrieval ─────────────────────────────────────────
+    print("[Agent 1] ContextRetrievalAgent — ranking documents …")
+    retrieval_agent  = ContextRetrievalAgent(mcp, store)
+    retrieved, vid   = retrieval_agent.retrieve_and_rank(query, context_documents)
+    print(f"          Retrieved {len(retrieved)} docs  |  version_id={vid}\n")
 
-    # Step 2: Reasoning Agent
-    print("[Agent 2] Reasoning Agent...")
-    reasoning_agent = ReasoningAgent(mcp)
-    raw_answer = reasoning_agent.generate_answer(query, retrieved_context)
-    print(f"  Answer generated ({len(raw_answer)} chars).\n")
+    if not retrieved:
+        print("  ⚠ No relevant context found. Aborting pipeline.")
+        return {}
 
-    # Step 3: Grounding Validator
-    print("[Agent 3] Grounding Validator Agent...")
-    validator_agent = GroundingValidatorAgent(mcp)
-    validation_result = validator_agent.validate(query, raw_answer, retrieved_context)
-    print(f"  Hallucination Risk: {validation_result['hallucination_risk']:.2%}")
-    print(f"  CIS Score: {validation_result['cis_score']:.2%}\n")
+    # ── Step 2: Reasoning ─────────────────────────────────────────────────
+    print("[Agent 2] ReasoningAgent — generating grounded answer …")
+    reasoning_agent = ReasoningAgent(mcp, store)
+    answer          = reasoning_agent.generate_answer(query, retrieved, version_id=vid)
+    print(f"          Answer: {answer[:120]}{'…' if len(answer) > 120 else ''}\n")
 
-    # Step 4: Adversarial Tester
-    print("[Agent 4] Adversarial Tester Agent...")
-    adversarial_agent = AdversarialTesterAgent(mcp)
-    robustness_result = adversarial_agent.test_robustness(
-        query, retrieved_context, reasoning_agent
+    # ── Step 3: Grounding Validation ──────────────────────────────────────
+    print("[Agent 3] GroundingValidatorAgent — verifying grounding …")
+    validator_agent   = GroundingValidatorAgent(mcp, store)
+    validation_result = validator_agent.validate(query, answer, retrieved)
+    print(f"          Verdict          : {validation_result.get('verdict', '?')}")
+    print(f"          CIS Score        : {validation_result.get('cis_score', 0):.2%}")
+    print(f"          Hallucination HR : {validation_result.get('hallucination_risk', 0):.2%}")
+    attr = validation_result.get("attribution", {})
+    if attr:
+        print(f"          Attribution Score: {attr.get('attribution_score', 0):.2%}")
+    if validation_result.get("unsupported_claims"):
+        print(f"          Unsupported claims: {validation_result['unsupported_claims']}")
+    print()
+
+    # ── Step 4: Adversarial Testing ───────────────────────────────────────
+    print(f"[Agent 4] AdversarialTesterAgent — {num_adversarial_trials} LLM-crafted injections …")
+    adversarial_agent  = AdversarialTesterAgent(mcp, store)
+    robustness_result  = adversarial_agent.test_robustness(
+        query, retrieved, reasoning_agent, num_trials=num_adversarial_trials
     )
-    print(f"  Robustness Score: {robustness_result['robustness_score']:.2%}\n")
+    print(f"          Robustness Score : {robustness_result.get('robustness_score', 0):.2%}")
+    for t in robustness_result.get("trials", []):
+        print(f"            Trial {t['trial']}: injected='{t['injected_doc'][:60]}…'  "
+              f"RS={t['robustness']:.2%}")
+    print()
 
-    # Final Metrics
+    # ── Final Metrics ─────────────────────────────────────────────────────
     metrics = evaluate_response(
-        answer=raw_answer,
-        context=retrieved_context,
+        answer=answer,
+        context=retrieved,
         validation=validation_result,
         robustness=robustness_result,
     )
 
-    # MCP Execution Log
-    mcp_log = mcp.get_execution_log()
+    print(format_report(metrics, query))
+
+    # ── MCP Log ───────────────────────────────────────────────────────────
+    mcp.print_log(verbose=verbose_mcp)
+
+    # ── ContextStore History ──────────────────────────────────────────────
+    store_history = store.history()
 
     result = {
-        "query": query,
-        "answer": raw_answer,
-        "retrieved_context": retrieved_context,
-        "validation": validation_result,
-        "robustness": robustness_result,
-        "metrics": metrics,
-        "mcp_log": mcp_log,
+        "query":              query,
+        "answer":             answer,
+        "retrieved_context":  retrieved,
+        "context_version_id": vid,
+        "validation":         validation_result,
+        "robustness":         robustness_result,
+        "metrics":            metrics,
+        "mcp_log":            mcp.get_execution_log(),
+        "context_store":      store_history,
     }
-
-    print("=" * 60)
-    print("FINAL ANSWER:")
-    print("-" * 60)
-    print(raw_answer)
-    print("-" * 60)
-    print(f"Hallucination Rate (HR):        {metrics['hallucination_rate']:.2%}")
-    print(f"Context Integrity Score (CIS):  {metrics['cis_score']:.2%}")
-    print(f"Context Utilization Eff. (CUE): {metrics['cue_score']:.2%}")
-    print(f"Robustness Score (RS):          {metrics['robustness_score']:.2%}")
-    print("=" * 60)
 
     return result
 
 
 if __name__ == "__main__":
-    # --- Demo: Simple RAG-like scenario ---
+    # ── Demo scenario ────────────────────────────────────────────────────
     sample_docs = [
         "The Eiffel Tower is located in Paris, France. It was built in 1889 by Gustave Eiffel.",
         "The Great Wall of China stretches over 13,000 miles and was built during the Ming dynasty.",
         "Water boils at 100 degrees Celsius at sea level under standard atmospheric pressure.",
-        "The Eiffel Tower stands 330 meters tall and attracts millions of tourists each year.",
+        "The Eiffel Tower stands 330 meters tall including its broadcast antenna.",
         "Photosynthesis is the process by which plants convert sunlight into food using chlorophyll.",
-        "Paris is the capital of France and has a population of over 2 million people in the city proper.",
+        "Paris is the capital of France and has a population of over 2 million people.",
+        "The Louvre Museum in Paris houses over 35,000 works of art including the Mona Lisa.",
+        "Mount Everest is the highest mountain on Earth at 8,849 meters above sea level.",
     ]
 
     query = "How tall is the Eiffel Tower and where is it located?"
 
-    result = run_contextguard_pipeline(query, sample_docs)
+    result = run_contextguard_pipeline(
+        query=query,
+        context_documents=sample_docs,
+        num_adversarial_trials=3,
+        verbose_mcp=False,
+    )
 
-    # Save full result as JSON
-    with open("contextguard_result.json", "w") as f:
-        json.dump(result, f, indent=2)
-    print("\nFull result saved to contextguard_result.json")
+    # Save full result
+    with open("contextguard_result.json", "w", encoding="utf-8") as f:
+        json.dump(result, f, indent=2, ensure_ascii=False)
+    print("\n✓ Full result saved to contextguard_result.json")
