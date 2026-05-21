@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ContextGuard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@500;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:      #0f1520;
+  --bg2:     #131c2b;
+  --bg3:     #1a2640;
+  --border:  #1e2d44;
+  --border2: #243347;
+  --purple:  #6c63ff;
+  --purple2: #7c72ff;
+  --green:   #00e5a0;
+  --orange:  #ffb07a;
+  --red:     #ff6b6b;
+  --text:    #a0b8d4;
+  --text2:   #dce8ff;
+  --muted:   #4e6a8a;
+  --font-h:  'Syne', sans-serif;
+  --font-m:  'Space Mono', monospace;
+  --r:       6px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-m);
+  font-size: 13px;
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(108,99,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(108,99,255,.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.shell { position: relative; z-index: 1; max-width: 1080px; margin: 0 auto; padding: 0 24px 80px; }
+
+/* Header */
+header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 28px 0 24px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+.logo-ring {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--purple), #00cfff);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.logo-name { font-family: var(--font-h); font-size: 20px; font-weight: 800; color: var(--text2); letter-spacing: -.4px; }
+.logo-sub  { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.hdr-chip  {
+  margin-left: auto; border: 1px solid var(--border2);
+  border-radius: 20px; padding: 3px 12px;
+  font-size: 9px; color: var(--muted); letter-spacing: .5px;
+}
+
+/* Tabs */
+.tabs { display: flex; gap: 2px; margin-bottom: 20px; background: var(--bg2); border-radius: var(--r); padding: 3px; }
+.tab {
+  flex: 1; text-align: center; padding: 7px;
+  border-radius: 4px; font-size: 10px; color: var(--muted);
+  cursor: pointer; letter-spacing: .5px; transition: all .15s;
+}
+.tab.active { background: var(--bg3); color: var(--text2); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Card */
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 18px; margin-bottom: 12px; }
+.card-label {
+  font-size: 9px; color: var(--muted); letter-spacing: 1.5px;
+  text-transform: uppercase; margin-bottom: 10px;
+  display: flex; align-items: center; gap: 7px;
+}
+.card-label::before { content: ''; display: block; width: 2px; height: 12px; background: var(--purple); border-radius: 1px; }
+
+/* Form */
+label { display: block; font-size: 9px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
+input[type=text], textarea, input[type=number] {
+  width: 100%; background: var(--bg2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 9px 12px;
+  color: var(--text2); font-family: var(--font-m); font-size: 12px;
+  outline: none; transition: border-color .15s;
+  resize: vertical;
+}
+input:focus, textarea:focus { border-color: var(--purple); }
+textarea { min-height: 130px; line-height: 1.6; }
+.form-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: end; margin-top: 14px; }
+
+/* Buttons */
+.btn { padding: 9px 24px; border-radius: var(--r); font-family: var(--font-m); font-size: 11px; font-weight: 700; letter-spacing: .8px; cursor: pointer; border: none; transition: all .15s; }
+.btn-primary { background: var(--purple); color: #fff; }
+.btn-primary:hover { background: var(--purple2); }
+.btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+.btn-secondary { background: transparent; color: var(--purple2); border: 1px solid var(--purple); }
+.btn-secondary:hover { background: rgba(108,99,255,.08); }
+.btn-secondary:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Spinner */
+.spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid rgba(255,255,255,.2); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 6px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Status */
+.status-bar { display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-radius: var(--r); background: var(--bg2); border: 1px solid var(--border); font-size: 11px; color: var(--muted); margin-bottom: 14px; min-height: 38px; }
+.status-bar.running { border-color: var(--purple); color: var(--purple2); }
+.status-bar.error   { border-color: var(--red);    color: var(--red); }
+.status-bar.done    { border-color: var(--green);  color: var(--green); }
+
+/* Metrics */
+.metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+@media (max-width: 600px) { .metrics-grid { grid-template-columns: repeat(2,1fr); } }
+.metric-box { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 10px; text-align: center; }
+.metric-box.ok   { border-color: rgba(0,229,160,.3); }
+.metric-box.warn { border-color: rgba(255,107,107,.3); }
+.metric-label { font-size: 8px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 5px; }
+.metric-value { font-family: var(--font-h); font-size: 24px; font-weight: 800; color: var(--text2); line-height: 1; }
+.metric-value.ok   { color: var(--green); }
+.metric-value.warn { color: var(--red); }
+.metric-value.blue { color: var(--purple2); }
+.metric-sub { font-size: 8px; color: var(--muted); margin-top: 3px; }
+
+/* Answer */
+.answer-box {
+  border-left: 2px solid var(--purple); padding: 10px 16px;
+  font-size: 12px; color: var(--text2); line-height: 1.7;
+  background: var(--bg2); border-radius: 0 var(--r) var(--r) 0; margin-bottom: 10px;
+}
+
+/* Badge */
+.badge { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 9px; font-weight: 700; letter-spacing: .8px; }
+.badge-grounded    { background: rgba(0,229,160,.1);  color: var(--green);  border: 1px solid rgba(0,229,160,.25); }
+.badge-partial     { background: rgba(255,176,122,.1); color: var(--orange); border: 1px solid rgba(255,176,122,.25); }
+.badge-hallucinated{ background: rgba(255,107,107,.1); color: var(--red);    border: 1px solid rgba(255,107,107,.25); }
+
+/* Attribution */
+.attr-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 4px; font-size: 11px; color: var(--text); }
+.attr-dot  { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.attr-score{ margin-left: auto; font-size: 9px; color: var(--muted); white-space: nowrap; }
+
+/* Collapsible */
+.coll-hdr { cursor: pointer; display: flex; align-items: center; gap: 7px; font-size: 9px; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; padding: 8px 0; border-top: 1px solid var(--border); margin-top: 10px; user-select: none; }
+.coll-hdr .arr { transition: transform .15s; }
+.coll-hdr.open .arr { transform: rotate(90deg); }
+.coll-body { display: none; padding-top: 10px; }
+.coll-body.open { display: block; }
+
+/* MCP table */
+.log-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.log-table th { text-align: left; color: var(--muted); font-weight: 400; padding: 5px 8px; border-bottom: 1px solid var(--border); font-size: 9px; letter-spacing: 1px; text-transform: uppercase; }
+.log-table td { padding: 5px 8px; border-bottom: 1px solid rgba(30,45,68,.5); }
+.log-table tr:last-child td { border-bottom: none; }
+.s-ok     { color: var(--green); }
+.s-denied { color: var(--orange); }
+.s-error  { color: var(--red); }
+
+/* Context chips */
+.ctx-chips { display: flex; flex-direction: column; gap: 6px; }
+.ctx-chip { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 8px 12px; font-size: 11px; line-height: 1.5; color: var(--text); position: relative; }
+.ctx-chip::after { content: attr(data-idx); position: absolute; top: 8px; right: 10px; font-size: 8px; color: var(--muted); letter-spacing: 1px; }
+
+/* Adversarial trials */
+.trial-row { padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 6px; background: var(--bg2); }
+.trial-hdr { display: flex; justify-content: space-between; font-size: 9px; color: var(--muted); margin-bottom: 5px; }
+.trial-inj { color: var(--orange); font-size: 11px; margin-bottom: 5px; }
+.rs-bar    { height: 3px; background: var(--bg3); border-radius: 2px; overflow: hidden; }
+.rs-fill   { height: 100%; border-radius: 2px; transition: width 1s ease; }
+
+/* Constraint */
+.constraint-violation { padding: 7px 12px; border-left: 2px solid var(--orange); border-radius: 0 var(--r) var(--r) 0; background: rgba(255,176,122,.06); font-size: 11px; color: var(--orange); margin-bottom: 5px; }
+
+/* Claims */
+.claims-list { list-style: none; }
+.claims-list li { padding: 6px 10px; border-left: 2px solid var(--red); border-radius: 0 var(--r) var(--r) 0; background: rgba(255,107,107,.05); margin-bottom: 5px; font-size: 11px; }
+
+/* Divider */
+.divider { height: 1px; background: var(--border); margin: 14px 0; }
+
+/* Benchmark */
+.bench-conds { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; margin-bottom: 14px; }
+@media (max-width: 600px) { .bench-conds { grid-template-columns: repeat(2,1fr); } }
+.cond-box { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--r); padding: 12px 8px; text-align: center; }
+.cond-box.hi { border-color: var(--purple); }
+.cond-label { font-size: 8px; color: var(--muted); letter-spacing: 1px; margin-bottom: 4px; }
+.cond-val   { font-family: var(--font-h); font-size: 20px; font-weight: 800; color: var(--text2); }
+.cond-val.hi { color: var(--purple2); }
+
+.progress-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--r); margin-bottom: 4px; font-size: 11px; }
+.pi-num   { color: var(--purple2); font-weight: 700; width: 18px; flex-shrink: 0; }
+.pi-q     { flex: 1; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pi-done  { font-size: 9px; color: var(--green); }
+.pi-run   { font-size: 9px; color: var(--purple2); }
+
+.bench-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+.bench-table th { background: var(--bg2); padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border); font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); font-weight: 400; }
+.bench-table td { padding: 8px 10px; border-bottom: 1px solid rgba(30,45,68,.4); vertical-align: top; }
+.bench-table tr:last-child td { border-bottom: none; }
+.bench-table tr:hover td { background: rgba(108,99,255,.03); }
+.best-cell { color: var(--green); font-weight: 700; }
+
+.hypo-box { padding: 9px 12px; border: 1px solid rgba(0,229,160,.25); border-radius: var(--r); background: rgba(0,229,160,.06); font-size: 11px; color: var(--green); margin-top: 12px; }
+.hypo-box.fail { border-color: rgba(255,107,107,.25); background: rgba(255,107,107,.06); color: var(--red); }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <header>
+    <div class="logo-ring">🛡</div>
+    <div>
+      <div class="logo-name">ContextGuard</div>
+      <div class="logo-sub">Multi-Agent MCP Framework · Context Integrity Verification</div>
+    </div>
+    <div class="hdr-chip">Group 2 &nbsp;·&nbsp; llama-3.3-70b</div>
+  </header>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('pipeline', this)">▶ pipeline</div>
+    <div class="tab" onclick="switchTab('benchmark', this)">⚡ benchmark</div>
+  </div>
+
+  <!-- ── Pipeline ── -->
+  <div id="tab-pipeline" class="tab-panel active">
+
+    <div class="card">
+      <div class="card-label">Input</div>
+      <label>query</label>
+      <input type="text" id="query" placeholder="e.g. How tall is the Eiffel Tower and where is it located?"
+             value="How tall is the Eiffel Tower and where is it located?">
+      <div style="margin-top:12px">
+        <label>context documents <span style="color:var(--muted);font-size:9px;text-transform:none;letter-spacing:0">(one per line)</span></label>
+        <textarea id="documents">The Eiffel Tower is located in Paris, France. It was built in 1889 by Gustave Eiffel.
+The Great Wall of China stretches over 13,000 miles and was built during the Ming dynasty.
+Water boils at 100 degrees Celsius at sea level under standard atmospheric pressure.
+The Eiffel Tower stands 330 meters tall including its broadcast antenna.
+Photosynthesis is the process by which plants convert sunlight into food using chlorophyll.
+Paris is the capital of France and has a population of over 2 million people.
+The Louvre Museum in Paris houses over 35,000 works of art including the Mona Lisa.
+Mount Everest is the highest mountain on Earth at 8,849 meters above sea level.</textarea>
+      </div>
+      <div class="form-row">
+        <div>
+          <label>adversarial trials</label>
+          <input type="number" id="adv-trials" value="2" min="1" max="5" style="max-width:90px">
+        </div>
+        <button class="btn btn-primary" id="run-btn" onclick="runPipeline()">run pipeline</button>
+      </div>
+    </div>
+
+    <div class="status-bar" id="pipe-status"><span>ready — enter a query and documents, then run.</span></div>
+
+    <div id="pipe-results" style="display:none">
+      <div class="metrics-grid" id="metrics-grid"></div>
+
+      <div class="card">
+        <div class="card-label">Answer</div>
+        <div class="answer-box" id="answer-text"></div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <span style="font-size:9px;color:var(--muted);letter-spacing:1px">VERDICT</span>
+          <span id="verdict-badge"></span>
+          <span style="margin-left:auto;font-size:9px;color:var(--muted)">version <span id="version-id" style="color:var(--purple2)"></span></span>
+        </div>
+      </div>
+
+      <div class="card" id="claims-card" style="display:none">
+        <div class="card-label">Unsupported claims</div>
+        <ul class="claims-list" id="claims-list"></ul>
+      </div>
+
+      <div id="violations-block" style="display:none;margin-bottom:12px"></div>
+
+      <div class="card">
+        <div class="card-label">Retrieved context</div>
+        <div class="ctx-chips" id="ctx-chips"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Attribution map</div>
+        <div id="attr-map"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">Adversarial tests</div>
+        <div id="adv-trials-list"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-label">MCP execution log</div>
+        <div class="coll-hdr" onclick="toggleColl(this)">
+          <span class="arr">▶</span> show / hide log
+        </div>
+        <div class="coll-body">
+          <table class="log-table">
+            <thead><tr><th>#</th><th>agent</th><th>action</th><th>status</th><th>input preview</th></tr></thead>
+            <tbody id="mcp-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Benchmark ── -->
+  <div id="tab-benchmark" class="tab-panel">
+
+    <div class="card">
+      <div class="card-label">4-condition experimental evaluation</div>
+      <p style="font-size:11px;color:var(--muted);line-height:1.7;margin-bottom:14px">
+        <span style="color:var(--text)">[A]</span> Baseline RAG &nbsp;·&nbsp;
+        <span style="color:var(--text)">[B]</span> Single-Agent LLM &nbsp;·&nbsp;
+        <span style="color:var(--text)">[C]</span> Multi-Agent / no MCP &nbsp;·&nbsp;
+        <span style="color:var(--purple2)">[D]</span> ContextGuard (full)<br>
+        Dataset: HotpotQA (distractor) + Natural Questions
+      </p>
+      <button class="btn btn-secondary" id="bench-btn" onclick="runBenchmark()">⚡ start benchmark</button>
+    </div>
+
+    <div class="status-bar" id="bench-status"><span>click start benchmark to begin.</span></div>
+
+    <div id="bench-progress" style="display:none;margin-bottom:14px">
+      <div id="progress-list"></div>
+    </div>
+
+    <div id="bench-results" style="display:none">
+      <div class="card">
+        <div class="card-label">Results per query</div>
+        <div style="overflow-x:auto">
+          <table class="bench-table">
+            <thead>
+              <tr>
+                <th>query</th><th>[A] baseline</th><th>[B] single llm</th>
+                <th>[C] multi/noMCP</th><th>[D] contextguard</th>
+                <th>HR</th><th>CIS</th><th>CUE</th><th>RS</th>
+              </tr>
+            </thead>
+            <tbody id="bench-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card" id="bench-summary" style="display:none">
+        <div class="card-label">Summary</div>
+        <div class="bench-conds" id="summary-conds"></div>
+        <div class="metrics-grid" id="summary-metrics"></div>
+        <div id="hypo-box"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function switchTab(name, el) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+function toggleColl(hdr) {
+  hdr.classList.toggle('open');
+  hdr.nextElementSibling.classList.toggle('open');
+}
+
+function pct(v) { return (v * 100).toFixed(1) + '%'; }
+function verdictBadge(v) {
+  const cls = { GROUNDED: 'badge-grounded', PARTIAL: 'badge-partial', HALLUCINATED: 'badge-hallucinated' };
+  return `<span class="badge ${cls[v] || 'badge-partial'}">${v || 'UNKNOWN'}</span>`;
+}
+function mClass(key, val) {
+  if (key === 'hallucination_rate') return val < 0.30 ? 'ok' : 'warn';
+  if (key === 'cis_score')          return val > 0.70 ? 'ok' : '';
+  if (key === 'cue_score')          return val > 0.50 ? 'ok' : '';
+  if (key === 'robustness_score')   return val > 0.70 ? 'ok' : '';
+  return '';
+}
+function setStatus(id, msg, cls) {
+  const el = document.getElementById(id);
+  el.className = 'status-bar' + (cls ? ' ' + cls : '');
+  el.innerHTML = msg;
+}
+
+async function runPipeline() {
+  const btn   = document.getElementById('run-btn');
+  const query = document.getElementById('query').value.trim();
+  const docs  = document.getElementById('documents').value.trim();
+  const trials= parseInt(document.getElementById('adv-trials').value) || 2;
+  if (!query || !docs) { alert('Please enter a query and documents.'); return; }
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>running…';
+  document.getElementById('pipe-results').style.display = 'none';
+  setStatus('pipe-status', '<span class="spinner"></span> running contextguard pipeline…', 'running');
+  try {
+    const resp = await fetch('/api/run', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ query, documents: docs, adversarial_trials: trials }),
+    });
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error);
+    renderPipeline(data);
+    setStatus('pipe-status', '✓ pipeline complete', 'done');
+    document.getElementById('pipe-results').style.display = 'block';
+  } catch (err) {
+    setStatus('pipe-status', '✗ ' + err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.innerHTML = 'run pipeline';
+  }
+}
+
+function renderPipeline(d) {
+  const m = d.metrics;
+  const defs = [
+    { key: 'hallucination_rate', label: 'HR',  sub: 'Hallucination Rate' },
+    { key: 'cis_score',          label: 'CIS', sub: 'Context Integrity' },
+    { key: 'cue_score',          label: 'CUE', sub: 'Utilization Eff.' },
+    { key: 'robustness_score',   label: 'RS',  sub: 'Robustness Score' },
+  ];
+  document.getElementById('metrics-grid').innerHTML =
+    defs.map(md => {
+      const val = m[md.key] ?? 0;
+      const cls = mClass(md.key, val);
+      const vcls = md.key === 'cis_score' || md.key === 'cue_score' || md.key === 'robustness_score' ? (cls === 'ok' ? 'ok' : 'blue') : (cls === 'ok' ? 'ok' : 'warn');
+      return `<div class="metric-box ${cls}">
+        <div class="metric-label">${md.label}</div>
+        <div class="metric-value ${vcls}">${pct(val)}</div>
+        <div class="metric-sub">${md.sub}</div>
+      </div>`;
+    }).join('') + `
+    <div class="metric-box" style="grid-column:span 4">
+      <div class="metric-label">Overall Score</div>
+      <div class="metric-value blue">${pct(m.overall_score ?? 0)}</div>
+      <div class="metric-sub">0.3×(1-HR) + 0.3×CIS + 0.2×CUE + 0.2×RS</div>
+    </div>`;
+
+  document.getElementById('answer-text').textContent  = d.answer;
+  document.getElementById('verdict-badge').innerHTML  = verdictBadge(d.validation?.verdict);
+  document.getElementById('version-id').textContent   = d.version_id || '—';
+
+  const claims = d.validation?.unsupported_claims || [];
+  const cc = document.getElementById('claims-card');
+  if (claims.length) {
+    document.getElementById('claims-list').innerHTML = claims.map(c => `<li>${c}</li>`).join('');
+    cc.style.display = 'block';
+  } else cc.style.display = 'none';
+
+  const vb = document.getElementById('violations-block');
+  const viol = m.constraint_violations || [];
+  if (viol.length) {
+    vb.style.display = 'block';
+    vb.innerHTML = viol.map(v => `<div class="constraint-violation">⚠ ${v}</div>`).join('');
+  } else vb.style.display = 'none';
+
+  document.getElementById('ctx-chips').innerHTML = (d.retrieved_context || []).map((doc, i) =>
+    `<div class="ctx-chip" data-idx="DOC ${i+1}">${doc}</div>`).join('');
+
+  const attr = d.validation?.attribution?.attribution_map || [];
+  document.getElementById('attr-map').innerHTML = attr.length
+    ? attr.map(a => {
+        const c = a.supported ? 'var(--green)' : 'var(--red)';
+        return `<div class="attr-item">
+          <div class="attr-dot" style="background:${c}"></div>
+          <span style="flex:1">${a.sentence}</span>
+          <span class="attr-score">doc ${a.best_doc_idx+1} · ${(a.score*100).toFixed(0)}%</span>
+        </div>`;
+      }).join('')
+    : '<p style="font-size:11px;color:var(--muted)">no attribution data.</p>';
+
+  const trials = d.robustness?.trials || [];
+  document.getElementById('adv-trials-list').innerHTML = trials.length
+    ? trials.map(t => `
+      <div class="trial-row">
+        <div class="trial-hdr"><span>trial ${t.trial}</span><span style="color:${t.robustness>=.7?'var(--green)':'var(--orange)'}">rs ${pct(t.robustness)}</span></div>
+        <div class="trial-inj">✗ "${t.injected_doc}"</div>
+        <div class="rs-bar"><div class="rs-fill" style="width:${(t.robustness*100).toFixed(0)}%;background:${t.robustness>=.7?'var(--green)':'var(--orange)'}"></div></div>
+      </div>`).join('')
+    : '<p style="font-size:11px;color:var(--muted)">no adversarial tests run.</p>';
+
+  document.getElementById('mcp-tbody').innerHTML = (d.mcp_log || []).map((e,i) => `
+    <tr>
+      <td style="color:var(--muted)">${i+1}</td>
+      <td>${e.agent.replace('Agent','')}</td>
+      <td style="color:var(--muted)">${e.action}</td>
+      <td class="s-${e.status}">${e.status}</td>
+      <td style="color:var(--muted);max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${e.input_preview}</td>
+    </tr>`).join('');
+}
+
+let benchRows = [];
+async function runBenchmark() {
+  const btn = document.getElementById('bench-btn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner" style="border-top-color:var(--purple2)"></span>running…';
+  setStatus('bench-status', '<span class="spinner" style="border-top-color:var(--purple2)"></span> benchmark in progress…', 'running');
+  benchRows = [];
+  document.getElementById('bench-progress').style.display = 'block';
+  document.getElementById('progress-list').innerHTML = '';
+  document.getElementById('bench-results').style.display = 'none';
+  document.getElementById('bench-tbody').innerHTML = '';
+  document.getElementById('bench-summary').style.display = 'none';
+
+  const es = new EventSource('/api/benchmark');
+  es.onmessage = function(evt) {
+    const msg = JSON.parse(evt.data);
+    if (msg.type === 'row') {
+      const r = msg.data; benchRows.push(r);
+      document.getElementById('progress-list').innerHTML += `
+        <div class="progress-item">
+          <span class="pi-num">${r.idx}</span>
+          <span class="pi-q">${r.query}</span>
+          <span class="pi-done">✓</span>
+        </div>`;
+      const best = Math.max(r.A.accuracy, r.B.accuracy, r.C.accuracy, r.D.accuracy);
+      const cell = acc => `<td class="${acc===best?'best-cell':''}">${pct(acc)}</td>`;
+      const dm = r.D;
+      document.getElementById('bench-tbody').innerHTML += `
+        <tr>
+          <td style="max-width:180px;color:var(--text)">${r.query}</td>
+          ${cell(r.A.accuracy)}${cell(r.B.accuracy)}${cell(r.C.accuracy)}${cell(r.D.accuracy)}
+          <td class="${(dm.hallucination_rate||0)<.3?'s-ok':'s-denied'}">${pct(dm.hallucination_rate||0)}</td>
+          <td class="${(dm.cis_score||0)>.7?'s-ok':''}">${pct(dm.cis_score||0)}</td>
+          <td>${pct(dm.cue_score||0)}</td>
+          <td class="${(dm.robustness_score||0)>.7?'s-ok':''}">${pct(dm.robustness_score||0)}</td>
+        </tr>`;
+      document.getElementById('bench-results').style.display = 'block';
+    }
+    if (msg.type === 'summary') {
+      const s = msg.data;
+      const labels = { A:'Baseline RAG', B:'Single LLM', C:'Multi/noMCP', D:'ContextGuard' };
+      document.getElementById('summary-conds').innerHTML = ['A','B','C','D'].map(k => `
+        <div class="cond-box${k==='D'?' hi':''}">
+          <div class="cond-label" style="${k==='D'?'color:var(--purple2)':''}">[${k}] ${labels[k]}</div>
+          <div class="cond-val${k==='D'?' hi':''}">${pct(s[k].avg_accuracy)}</div>
+        </div>`).join('');
+      const sm = [
+        {k:'hallucination_rate',l:'avg HR', vcls:'warn'},{k:'cis_score',l:'avg CIS',vcls:'blue'},
+        {k:'cue_score',l:'avg CUE',vcls:'blue'},{k:'robustness_score',l:'avg RS',vcls:'ok'}
+      ];
+      document.getElementById('summary-metrics').innerHTML = sm.map(x => `
+        <div class="metric-box">
+          <div class="metric-label">${x.l}</div>
+          <div class="metric-value ${x.vcls}">${pct(s.D[x.k]||0)}</div>
+        </div>`).join('');
+      const hr = s.D.hallucination_rate || 0;
+      const ok = hr < 0.30;
+      document.getElementById('hypo-box').innerHTML = `
+        <div class="hypo-box${ok?'':' fail'}">
+          ${ok ? '✓' : '✗'} hypothesis ${ok?'supported':'not met'} — avg HR ${pct(hr)} ${ok?'<':'≥'} τ (30%)
+        </div>`;
+      document.getElementById('bench-summary').style.display = 'block';
+    }
+    if (msg.type === 'done') {
+      es.close(); btn.disabled = false; btn.innerHTML = '⚡ start benchmark';
+      setStatus('bench-status', `✓ benchmark complete — ${benchRows.length} queries evaluated`, 'done');
+    }
+    if (msg.type === 'error') {
+      document.getElementById('progress-list').innerHTML +=
+        `<div style="color:var(--red);font-size:10px;padding:5px">✗ ${msg.query}: ${msg.msg}</div>`;
+    }
+  };
+  es.onerror = function() {
+    es.close(); btn.disabled = false; btn.innerHTML = '⚡ start benchmark';
+    setStatus('bench-status', '✗ connection error — check server logs', 'error');
+  };
+}
+</script>
+</body>
+</html>

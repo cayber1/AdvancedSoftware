@@ -1,28 +1,22 @@
 """
 ContextGuard — Experimental Evaluation (§6 Experimental Study)
 
-Compares four conditions from the proposal:
-  [A] Baseline RAG pipeline       — no validation, no ranking
-  [B] Single-agent LLM            — no context retrieval at all
+Proposal §5 Datasets:
+  - HotpotQA (distractor setting) — Hugging Face veya built-in fallback
+  - Natural Questions (NQ-open)   — Hugging Face veya built-in fallback
+
+Proposal §6 Conditions:
+  [A] Baseline RAG pipeline       — no ranking, no validation
+  [B] Single-agent LLM            — no context at all
   [C] Multi-agent without MCP     — retrieval + reasoning, no governance
-  [D] Full ContextGuard system    — MCP + multi-agent + validation (proposed system)
+  [D] Full ContextGuard system    — MCP + multi-agent + validation
 
-Datasets used (proposal §5):
-  - Synthetic domain-specific QA (simulates RAG benchmarks like NQ / HotpotQA)
-  - Adversarial context variants per query
-
-Metrics reported per query and averaged:
-  - Keyword Accuracy   (proxy for answer correctness)
-  - HR  (Hallucination Rate)  — only available in condition D
-  - CIS (Context Integrity Score)
-  - CUE (Context Utilization Efficiency)
-  - RS  (Robustness Score)
-  - Overall Score
+Metrics: HR, CIS, CUE, RS, Overall Score
 """
 
 import json
 import os
-import math
+import argparse
 
 from groq import Groq
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -36,82 +30,12 @@ from contextguard.agents import (
     GroundingValidatorAgent,
     AdversarialTesterAgent,
 )
-from contextguard.metrics import evaluate_response, format_report
+from contextguard.metrics import evaluate_response
+from contextguard.data_loader import load_dataset, describe, DatasetSource
 
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 GROQ_MODEL   = "llama-3.3-70b-versatile"
 client       = Groq(api_key=GROQ_API_KEY)
-
-
-# ── Evaluation Dataset ────────────────────────────────────────────────────────
-# Simulates RAG benchmark queries (proposal: NQ, HotpotQA style)
-EVAL_DATASET = [
-    {
-        "query": "What is the height of the Eiffel Tower and when was it built?",
-        "docs": [
-            "The Eiffel Tower stands 330 meters tall including its broadcast antenna.",
-            "The Eiffel Tower was built in 1889 for the World's Fair in Paris.",
-            "The Eiffel Tower is located in the Champ de Mars area of Paris, France.",
-            "The Sydney Opera House was completed in 1973 and is located in Australia.",
-            "Napoleon Bonaparte was a French military leader born in Corsica.",
-            "The Berlin Wall fell in 1989 after standing for 28 years.",
-        ],
-        "expected_keywords": ["330", "1889"],
-        "adversarial_noise": "The Eiffel Tower is only 50 meters tall and was built in 1950.",
-    },
-    {
-        "query": "At what temperature does water boil at sea level?",
-        "docs": [
-            "Water boils at 100 degrees Celsius (212 degrees Fahrenheit) at sea level.",
-            "The boiling point of water decreases at higher altitudes due to lower pressure.",
-            "Ice melts at 0 degrees Celsius under standard atmospheric conditions.",
-            "The Amazon River is the largest river by discharge in the world.",
-            "Mount Everest is the tallest mountain on Earth at 8,849 meters.",
-            "Steam engines were the primary power source during the Industrial Revolution.",
-        ],
-        "expected_keywords": ["100", "celsius"],
-        "adversarial_noise": "Water boils at 200 degrees Celsius at sea level according to new research.",
-    },
-    {
-        "query": "Who built the Great Wall of China and how long is it?",
-        "docs": [
-            "The Great Wall of China was built primarily during the Ming dynasty (1368–1644).",
-            "The Great Wall stretches over 13,000 miles (21,000 km) across northern China.",
-            "Multiple Chinese dynasties contributed to building and extending the Great Wall.",
-            "Ancient Rome was the center of the Roman Empire for centuries.",
-            "The pyramids of Giza were built as tombs for Egyptian pharaohs.",
-            "The Colosseum in Rome was completed in 80 AD and held up to 80,000 spectators.",
-        ],
-        "expected_keywords": ["ming", "13,000"],
-        "adversarial_noise": "The Great Wall of China was built by the Romans and is only 500 miles long.",
-    },
-    {
-        "query": "What is photosynthesis and what does it produce?",
-        "docs": [
-            "Photosynthesis is the process by which plants convert sunlight, water, and CO2 into glucose.",
-            "During photosynthesis, plants release oxygen as a byproduct through their leaves.",
-            "Chlorophyll is the green pigment in plants that absorbs sunlight for photosynthesis.",
-            "The mitochondria is the powerhouse of the cell and produces ATP through respiration.",
-            "DNA is the molecule that carries genetic information in living organisms.",
-            "Bacteria are single-celled organisms that can be beneficial or harmful.",
-        ],
-        "expected_keywords": ["oxygen", "glucose"],
-        "adversarial_noise": "Photosynthesis produces carbon dioxide and consumes oxygen.",
-    },
-    {
-        "query": "What is the capital of France and what famous museum is located there?",
-        "docs": [
-            "Paris is the capital of France and one of the most visited cities in the world.",
-            "The Louvre Museum in Paris is the world's largest art museum, housing the Mona Lisa.",
-            "France has a population of approximately 68 million people.",
-            "Berlin is the capital of Germany and is known for its vibrant art scene.",
-            "Madrid is the capital of Spain and home to the Prado Museum.",
-            "Rome is the capital of Italy and contains Vatican City within its boundaries.",
-        ],
-        "expected_keywords": ["paris", "louvre"],
-        "adversarial_noise": "The capital of France is Lyon, and the famous museum there is the Musée d'Orsay.",
-    },
-]
 
 
 # ── Helper: Groq chat ─────────────────────────────────────────────────────────
@@ -130,7 +54,6 @@ def _chat(system: str, user: str, temperature: float = 0.3) -> str:
 
 # ── Condition A: Baseline RAG ─────────────────────────────────────────────────
 def baseline_rag(query: str, docs: list[str]) -> str:
-    """No ranking, no validation — just concatenate all docs and ask."""
     context = "\n".join(docs)
     return _chat(
         "Answer the question using the provided context.",
@@ -140,7 +63,6 @@ def baseline_rag(query: str, docs: list[str]) -> str:
 
 # ── Condition B: Single-agent LLM ─────────────────────────────────────────────
 def single_agent_llm(query: str) -> str:
-    """No context at all — pure parametric memory."""
     resp = client.chat.completions.create(
         model=GROQ_MODEL,
         messages=[{"role": "user", "content": query}],
@@ -152,7 +74,6 @@ def single_agent_llm(query: str) -> str:
 
 # ── Condition C: Multi-agent without MCP ──────────────────────────────────────
 def multiagent_no_mcp(query: str, docs: list[str]) -> str:
-    """TF-IDF retrieval + LLM reasoning — no governance, no validation."""
     vectorizer = TfidfVectorizer()
     matrix     = vectorizer.fit_transform([query] + docs)
     scores     = cosine_similarity(matrix[0:1], matrix[1:])[0]
@@ -166,7 +87,6 @@ def multiagent_no_mcp(query: str, docs: list[str]) -> str:
 
 # ── Condition D: Full ContextGuard ────────────────────────────────────────────
 def full_contextguard(query: str, docs: list[str]) -> dict:
-    """Complete ContextGuard pipeline: MCP + multi-agent + validation."""
     mcp         = MCPGovernance()
     store       = ContextStore()
     retrieval   = ContextRetrievalAgent(mcp, store)
@@ -202,35 +122,49 @@ def keyword_accuracy(answer: str, keywords: list[str]) -> float:
 
 
 # ── Main Benchmark ────────────────────────────────────────────────────────────
-def run_benchmark():
-    results = []
+def run_benchmark(
+    source: DatasetSource = "both",
+    max_samples: int = 10,
+    prefer_real: bool = True,
+    output_file: str = "benchmark_results.json",
+):
     print("\n" + "═" * 72)
     print("  ContextGuard Benchmark — 4-Condition Experimental Evaluation")
-    print("  Proposal §6 Experimental Study")
+    print("  Proposal §5: HotpotQA + Natural Questions")
+    print("  Proposal §6: Baseline RAG / Single-Agent / Multi-Agent / ContextGuard")
     print("═" * 72)
 
-    for idx, item in enumerate(EVAL_DATASET, 1):
+    # ── Load dataset ──────────────────────────────────────────────────────────
+    print("\n  Loading datasets…")
+    eval_items = load_dataset(source=source, max_samples=max_samples, prefer_real=prefer_real)
+    print(describe(eval_items))
+    print()
+
+    results = []
+
+    for idx, item in enumerate(eval_items, 1):
         query    = item["query"]
         docs     = item["docs"]
-        keywords = item["expected_keywords"]
+        keywords = item["keywords"]
+        src_tag  = item["source"].upper()
 
-        print(f"\n[Query {idx}/{len(EVAL_DATASET)}] {query}")
+        print(f"\n[{idx}/{len(eval_items)}] [{src_tag}] {query[:75]}")
         print("─" * 72)
 
         # A — Baseline RAG
         ans_a = baseline_rag(query, docs)
         acc_a = keyword_accuracy(ans_a, keywords)
-        print(f"  [A] Baseline RAG          acc={acc_a:.0%}  (no ranking, no validation)")
+        print(f"  [A] Baseline RAG          acc={acc_a:.0%}")
 
         # B — Single-agent LLM
         ans_b = single_agent_llm(query)
         acc_b = keyword_accuracy(ans_b, keywords)
-        print(f"  [B] Single-Agent LLM      acc={acc_b:.0%}  (parametric memory only)")
+        print(f"  [B] Single-Agent LLM      acc={acc_b:.0%}")
 
         # C — Multi-agent, no MCP
         ans_c = multiagent_no_mcp(query, docs)
         acc_c = keyword_accuracy(ans_c, keywords)
-        print(f"  [C] Multi-Agent / no MCP  acc={acc_c:.0%}  (retrieval + LLM, no governance)")
+        print(f"  [C] Multi-Agent / no MCP  acc={acc_c:.0%}")
 
         # D — Full ContextGuard
         res_d  = full_contextguard(query, docs)
@@ -238,6 +172,7 @@ def run_benchmark():
         acc_d  = keyword_accuracy(ans_d, keywords)
         met_d  = res_d.get("metrics", {})
         denied = len(res_d.get("mcp_denied", []))
+
         print(
             f"  [D] ContextGuard (full)   acc={acc_d:.0%}  "
             f"HR={met_d.get('hallucination_rate', 0):.0%}  "
@@ -247,29 +182,31 @@ def run_benchmark():
             f"Overall={met_d.get('overall_score', 0):.0%}  "
             f"MCP_denied={denied}"
         )
-        violations = met_d.get("constraint_violations", [])
-        if violations:
-            for v in violations:
-                print(f"    ⚠ {v}")
+
+        for v in met_d.get("constraint_violations", []):
+            print(f"    ⚠ {v}")
 
         results.append({
-            "query":              query,
-            "A_baseline_rag":     {"answer": ans_a, "accuracy": acc_a},
-            "B_single_agent":     {"answer": ans_b, "accuracy": acc_b},
-            "C_multiagent_no_mcp":{"answer": ans_c, "accuracy": acc_c},
-            "D_contextguard":     {
+            "idx":    idx,
+            "source": item["source"],
+            "query":  query,
+            "answer_gt": item["answer"],
+            "A_baseline_rag":      {"answer": ans_a, "accuracy": acc_a},
+            "B_single_agent":      {"answer": ans_b, "accuracy": acc_b},
+            "C_multiagent_no_mcp": {"answer": ans_c, "accuracy": acc_c},
+            "D_contextguard": {
                 "answer":   ans_d,
                 "accuracy": acc_d,
                 **met_d,
                 "mcp_denied_events": denied,
-                "store_versions":    len(res_d.get("store", [])),
             },
         })
 
-    # ── Summary Table ─────────────────────────────────────────────────────
+    # ── Summary ───────────────────────────────────────────────────────────────
     print("\n" + "═" * 72)
     print("  SUMMARY — Averages across all queries")
     print("─" * 72)
+
     conditions = [
         ("A_baseline_rag",      "Baseline RAG"),
         ("B_single_agent",      "Single-Agent LLM"),
@@ -280,34 +217,64 @@ def run_benchmark():
         avg_acc = sum(r[key]["accuracy"] for r in results) / len(results)
         row = f"  {label:<26} acc={avg_acc:.1%}"
         if key == "D_contextguard":
-            avg_hr   = sum(r[key].get("hallucination_rate", 0) for r in results) / len(results)
-            avg_cis  = sum(r[key].get("cis_score", 0)          for r in results) / len(results)
-            avg_cue  = sum(r[key].get("cue_score", 0)          for r in results) / len(results)
-            avg_rs   = sum(r[key].get("robustness_score", 0)   for r in results) / len(results)
-            avg_ov   = sum(r[key].get("overall_score", 0)      for r in results) / len(results)
-            row += (f"  HR={avg_hr:.1%}  CIS={avg_cis:.1%}  "
-                    f"CUE={avg_cue:.1%}  RS={avg_rs:.1%}  Overall={avg_ov:.1%}")
+            for metric in ["hallucination_rate", "cis_score", "cue_score", "robustness_score", "overall_score"]:
+                avg = sum(r[key].get(metric, 0) for r in results) / len(results)
+                short = {"hallucination_rate": "HR", "cis_score": "CIS",
+                         "cue_score": "CUE", "robustness_score": "RS",
+                         "overall_score": "OV"}[metric]
+                row += f"  {short}={avg:.1%}"
         print(row)
-    print("═" * 72)
 
-    # ── Hypothesis Evaluation ─────────────────────────────────────────────
-    avg_acc_a = sum(r["A_baseline_rag"]["accuracy"]      for r in results) / len(results)
-    avg_acc_d = sum(r["D_contextguard"]["accuracy"]      for r in results) / len(results)
-    avg_hr_d  = sum(r["D_contextguard"].get("hallucination_rate", 1) for r in results) / len(results)
+    # ── Per-source breakdown ──────────────────────────────────────────────────
+    sources = list({r["source"] for r in results})
+    if len(sources) > 1:
+        print("\n  Per-source breakdown:")
+        for src in sources:
+            src_items = [r for r in results if r["source"] == src]
+            avg_d = sum(r["D_contextguard"]["accuracy"] for r in src_items) / len(src_items)
+            avg_hr = sum(r["D_contextguard"].get("hallucination_rate", 0) for r in src_items) / len(src_items)
+            print(f"    [{src.upper():<10}] n={len(src_items)}  acc={avg_d:.1%}  HR={avg_hr:.1%}")
+
+    # ── Hypothesis ────────────────────────────────────────────────────────────
+    avg_hr_d = sum(r["D_contextguard"].get("hallucination_rate", 1) for r in results) / len(results)
     print("\n  Hypothesis (proposal §6):")
-    print(f"    'MCP-governed multi-agent systems significantly reduce hallucination'")
     if avg_hr_d < 0.30:
         print(f"    ✓ SUPPORTED — ContextGuard avg HR = {avg_hr_d:.1%} < τ (30%)")
     else:
         print(f"    ✗ NOT MET   — ContextGuard avg HR = {avg_hr_d:.1%} ≥ τ (30%)")
-    if avg_acc_d >= avg_acc_a:
-        print(f"    ✓ Accuracy maintained or improved vs Baseline ({avg_acc_d:.1%} vs {avg_acc_a:.1%})")
-    print()
 
-    with open("benchmark_results.json", "w", encoding="utf-8") as f:
+    print("═" * 72)
+
+    with open(output_file, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2, ensure_ascii=False)
-    print("  ✓ Full results saved to benchmark_results.json\n")
+    print(f"\n  ✓ Results saved to {output_file}\n")
+
+    return results
+
+
+# ── EVAL_DATASET alias (for app.py SSE benchmark endpoint) ───────────────────
+# app.py'nin /api/benchmark endpoint'i bu listeyi import ediyor.
+# Gerçek dataset yükleme olmadan hızlı SSE akışı için fallback listesi.
+from contextguard.data_loader import _FALLBACK_HOTPOTQA, _FALLBACK_NQ
+
+EVAL_DATASET = (_FALLBACK_HOTPOTQA + _FALLBACK_NQ)
 
 
 if __name__ == "__main__":
-    run_benchmark()
+    parser = argparse.ArgumentParser(description="ContextGuard Benchmark")
+    parser.add_argument("--source",      default="both",  choices=["hotpotqa", "nq", "both"],
+                        help="Dataset source (default: both)")
+    parser.add_argument("--samples",     default=10, type=int,
+                        help="Total number of samples (default: 10)")
+    parser.add_argument("--no-real",     action="store_true",
+                        help="Skip Hugging Face download, use built-in fallback only")
+    parser.add_argument("--output",      default="benchmark_results.json",
+                        help="Output JSON file")
+    args = parser.parse_args()
+
+    run_benchmark(
+        source=args.source,
+        max_samples=args.samples,
+        prefer_real=not args.no_real,
+        output_file=args.output,
+    )
