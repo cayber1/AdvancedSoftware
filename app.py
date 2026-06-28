@@ -114,7 +114,7 @@ def run_pipeline():
         return jsonify({"error": str(e), "trace": traceback.format_exc()}), 500
 
 
-@app.route("/api/benchmark", methods=["POST"])
+@app.route("/api/benchmark", methods=["GET"])
 def run_benchmark():
     """
     Run the 4-condition benchmark and stream Server-Sent Events back to the UI.
@@ -130,7 +130,7 @@ def run_benchmark():
         for idx, item in enumerate(EVAL_DATASET, 1):
             query    = item["query"]
             docs     = item["docs"]
-            keywords = item["expected_keywords"]
+            keywords = item["keywords"]
 
             try:
                 ans_a = baseline_rag(query, docs)

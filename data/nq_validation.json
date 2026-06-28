@@ -1,0 +1,1391 @@
+[
+  {
+    "id": "nq_00000",
+    "query": "when was the last time anyone was on the moon",
+    "answer": "14 December 1972 UTC",
+    "docs": [
+      "The answer to this question relates to: 14 December 1972 UTC.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "14",
+      "december",
+      "1972"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00001",
+    "query": "who wrote he ain't heavy he's my brother lyrics",
+    "answer": "Bobby Scott",
+    "docs": [
+      "The answer to this question relates to: Bobby Scott.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "bobby",
+      "scott"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00002",
+    "query": "how many seasons of the bastard executioner are there",
+    "answer": "one",
+    "docs": [
+      "The answer to this question relates to: one.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "one"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00003",
+    "query": "when did the eagles win last super bowl",
+    "answer": "2017",
+    "docs": [
+      "The answer to this question relates to: 2017.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "2017"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00004",
+    "query": "who won last year's ncaa women's basketball",
+    "answer": "South Carolina",
+    "docs": [
+      "The answer to this question relates to: South Carolina.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "south",
+      "carolina"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00005",
+    "query": "when did the isle of wight become an island",
+    "answer": "During the last Ice Age",
+    "docs": [
+      "The answer to this question relates to: During the last Ice Age.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "during",
+      "last",
+      "ice"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00006",
+    "query": "love yourself by justin bieber is about who",
+    "answer": "Rihanna",
+    "docs": [
+      "The answer to this question relates to: Rihanna.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "rihanna"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00007",
+    "query": "who was the ruler of england in 1616",
+    "answer": "James I",
+    "docs": [
+      "The answer to this question relates to: James I.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "james"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00008",
+    "query": "what is the hot coffee mod in san andreas",
+    "answer": "a normally inaccessible mini-game",
+    "docs": [
+      "The answer to this question relates to: a normally inaccessible mini-game.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "normally",
+      "inaccessible",
+      "mini"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00009",
+    "query": "what is the maximum data rate for the 802.11a standard select one",
+    "answer": "54 Mbit/s",
+    "docs": [
+      "The answer to this question relates to: 54 Mbit/s.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "54",
+      "mbit"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00010",
+    "query": "which state is located in the centre of india",
+    "answer": "Chhattisgarh",
+    "docs": [
+      "The answer to this question relates to: Chhattisgarh.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "chhattisgarh"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00011",
+    "query": "who sang i ran all the way home",
+    "answer": "The Impalas",
+    "docs": [
+      "The answer to this question relates to: The Impalas.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "impalas"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00012",
+    "query": "where did the last name wallace come from",
+    "answer": "a Scottish surname",
+    "docs": [
+      "The answer to this question relates to: a Scottish surname.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "scottish",
+      "surname"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00013",
+    "query": "who was the actor that played ben stone on law and order",
+    "answer": "Michael Moriarty",
+    "docs": [
+      "The answer to this question relates to: Michael Moriarty.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "michael",
+      "moriarty"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00014",
+    "query": "who does the voice of nala in the lion king",
+    "answer": "Niketa Calame",
+    "docs": [
+      "The answer to this question relates to: Niketa Calame.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "niketa",
+      "calame"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00015",
+    "query": "who plays gram on the young and the restless",
+    "answer": "Max Shippee",
+    "docs": [
+      "The answer to this question relates to: Max Shippee.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "max",
+      "shippee"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00016",
+    "query": "what is the oath that new citizens take",
+    "answer": "United States Oath of Allegiance",
+    "docs": [
+      "The answer to this question relates to: United States Oath of Allegiance.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "united",
+      "states",
+      "oath"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00017",
+    "query": "who is under the mask of darth vader",
+    "answer": "Anakin Skywalker",
+    "docs": [
+      "The answer to this question relates to: Anakin Skywalker.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "anakin",
+      "skywalker"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00018",
+    "query": "who had a baby at 100 in the bible",
+    "answer": "Sarah",
+    "docs": [
+      "The answer to this question relates to: Sarah.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "sarah"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00019",
+    "query": "what age do you need to be to buy a bb gun",
+    "answer": "18",
+    "docs": [
+      "The answer to this question relates to: 18.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "18"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00020",
+    "query": "ethiopia flight 961 crashes in to the sea",
+    "answer": "23 November 1996",
+    "docs": [
+      "The answer to this question relates to: 23 November 1996.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "23",
+      "november",
+      "1996"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00021",
+    "query": "where was percy jackson and the olympians filmed",
+    "answer": "Vancouver",
+    "docs": [
+      "The answer to this question relates to: Vancouver.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "vancouver"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00022",
+    "query": "how many seasons of vampire diaries r there",
+    "answer": "eight",
+    "docs": [
+      "The answer to this question relates to: eight.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "eight"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00023",
+    "query": "how many episodes are there in dragon ball z",
+    "answer": "291 episodes",
+    "docs": [
+      "The answer to this question relates to: 291 episodes.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "291",
+      "episodes"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00024",
+    "query": "who plays auggie in the movie the wonder",
+    "answer": "Jacob Tremblay",
+    "docs": [
+      "The answer to this question relates to: Jacob Tremblay.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "jacob",
+      "tremblay"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00025",
+    "query": "when was the first australian prime minister elected",
+    "answer": "Sir Edmund Barton",
+    "docs": [
+      "The answer to this question relates to: Sir Edmund Barton.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "sir",
+      "edmund",
+      "barton"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00026",
+    "query": "who plays matthew on anne with an e",
+    "answer": "R. H. Thomson",
+    "docs": [
+      "The answer to this question relates to: R. H. Thomson.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "thomson"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00027",
+    "query": "who is the girl in green day 21 guns",
+    "answer": "Lisa Stelly",
+    "docs": [
+      "The answer to this question relates to: Lisa Stelly.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "lisa",
+      "stelly"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00028",
+    "query": "who plays joker in batman the dark knight",
+    "answer": "Ledger",
+    "docs": [
+      "The answer to this question relates to: Ledger.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "ledger"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00029",
+    "query": "when was the south asian association for regional co-operation (saarc) formed",
+    "answer": "December 1985",
+    "docs": [
+      "The answer to this question relates to: December 1985.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "december",
+      "1985"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00030",
+    "query": "when was the first hunger games book published",
+    "answer": "September 14, 2008",
+    "docs": [
+      "The answer to this question relates to: September 14, 2008.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "september",
+      "14",
+      "2008"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00031",
+    "query": "who did bette midler portray in the rose",
+    "answer": "Mary Rose Foster",
+    "docs": [
+      "The answer to this question relates to: Mary Rose Foster.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "mary",
+      "rose",
+      "foster"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00032",
+    "query": "who is the lead singer of depeche mode",
+    "answer": "David Gahan",
+    "docs": [
+      "The answer to this question relates to: David Gahan.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "david",
+      "gahan"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00033",
+    "query": "where did the butchers in the slaughterhouse cases live",
+    "answer": "New Orleans",
+    "docs": [
+      "The answer to this question relates to: New Orleans.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "new",
+      "orleans"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00034",
+    "query": "who developed the concept of total quality management",
+    "answer": "W. Edwards Deming",
+    "docs": [
+      "The answer to this question relates to: W. Edwards Deming.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "edwards",
+      "deming"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00035",
+    "query": "who wrote cant get you out of my head lyrics",
+    "answer": "Cathy Dennis and Rob Davis",
+    "docs": [
+      "The answer to this question relates to: Cathy Dennis and Rob Davis.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "cathy",
+      "dennis",
+      "rob"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00036",
+    "query": "where does no game no life anime end",
+    "answer": "the Elkia Federation",
+    "docs": [
+      "The answer to this question relates to: the Elkia Federation.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "elkia",
+      "federation"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00037",
+    "query": "when did taylor swift's first album release",
+    "answer": "October 24, 2006",
+    "docs": [
+      "The answer to this question relates to: October 24, 2006.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "october",
+      "24",
+      "2006"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00038",
+    "query": "what are the three fifty shades of grey books",
+    "answer": "Fifty Shades of Grey",
+    "docs": [
+      "The answer to this question relates to: Fifty Shades of Grey.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "fifty",
+      "shades",
+      "grey"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00039",
+    "query": "who has the power (judicial) to make decisions in courts of law",
+    "answer": "judges",
+    "docs": [
+      "The answer to this question relates to: judges.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "judges"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00040",
+    "query": "what are the ranks in the us navy",
+    "answer": "E-8s senior chief petty officer",
+    "docs": [
+      "The answer to this question relates to: E-8s senior chief petty officer.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "8s",
+      "senior",
+      "chief"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00041",
+    "query": "i was a great islamic scholar and mathematician who died in 1131 ce",
+    "answer": "Omar Khayyam",
+    "docs": [
+      "The answer to this question relates to: Omar Khayyam.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "omar",
+      "khayyam"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00042",
+    "query": "who is the coach for the ottawa senators",
+    "answer": "Guy Boucher",
+    "docs": [
+      "The answer to this question relates to: Guy Boucher.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "guy",
+      "boucher"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00043",
+    "query": "last episode of what happens to my family",
+    "answer": "53",
+    "docs": [
+      "The answer to this question relates to: 53.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "53"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00044",
+    "query": "when is the last time the vikings were in the nfc championship",
+    "answer": "1976",
+    "docs": [
+      "The answer to this question relates to: 1976.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "1976"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00045",
+    "query": "what are the colors of the netherlands flag",
+    "answer": "blue",
+    "docs": [
+      "The answer to this question relates to: blue.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "blue"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00046",
+    "query": "where is lord's prayer found in bible",
+    "answer": "in the Gospel of Luke",
+    "docs": [
+      "The answer to this question relates to: in the Gospel of Luke.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "gospel",
+      "luke"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00047",
+    "query": "when was the last time oklahoma won a national championship in football",
+    "answer": "2003",
+    "docs": [
+      "The answer to this question relates to: 2003.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "2003"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00048",
+    "query": "location of the ten commandments in the bible",
+    "answer": "Exodus",
+    "docs": [
+      "The answer to this question relates to: Exodus.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "exodus"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00049",
+    "query": "where did the allies go after north africa",
+    "answer": "Italy",
+    "docs": [
+      "The answer to this question relates to: Italy.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "italy"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00050",
+    "query": "what is the meaning of veronica in english",
+    "answer": "she who brings victory",
+    "docs": [
+      "The answer to this question relates to: she who brings victory.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "she",
+      "who",
+      "brings"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00051",
+    "query": "what is the name of the main artery which takes blood from the heart to the body",
+    "answer": "The aorta",
+    "docs": [
+      "The answer to this question relates to: The aorta.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "aorta"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00052",
+    "query": "who played solomon in little house on the prairie",
+    "answer": "Todd Bridges",
+    "docs": [
+      "The answer to this question relates to: Todd Bridges.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "todd",
+      "bridges"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00053",
+    "query": "who does eric end up with in that 70s show",
+    "answer": "Donna",
+    "docs": [
+      "The answer to this question relates to: Donna.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "donna"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00054",
+    "query": "an object that moves around an external axis is said to be",
+    "answer": "revolution or orbital revolution",
+    "docs": [
+      "The answer to this question relates to: revolution or orbital revolution.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "revolution",
+      "orbital",
+      "revolution"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00055",
+    "query": "architectural elements forming rib vaults eg wells cathedral",
+    "answer": "an armature of piped masonry",
+    "docs": [
+      "The answer to this question relates to: an armature of piped masonry.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "armature",
+      "piped",
+      "masonry"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00056",
+    "query": "who sang the song good morning good morning",
+    "answer": "Gene Kelly",
+    "docs": [
+      "The answer to this question relates to: Gene Kelly.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "gene",
+      "kelly"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00057",
+    "query": "who wrote papa got a brand new bag",
+    "answer": "James Brown",
+    "docs": [
+      "The answer to this question relates to: James Brown.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "james",
+      "brown"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00058",
+    "query": "where does a roadrunner live in the desert",
+    "answer": "mountainous shrubland",
+    "docs": [
+      "The answer to this question relates to: mountainous shrubland.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "mountainous",
+      "shrubland"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00059",
+    "query": "who wrote it's a long long way to pasadena",
+    "answer": "John Young",
+    "docs": [
+      "The answer to this question relates to: John Young.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "john",
+      "young"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00060",
+    "query": "what's the dog's name on tom and jerry",
+    "answer": "Spike",
+    "docs": [
+      "The answer to this question relates to: Spike.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "spike"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00061",
+    "query": "who are nominated for president of india 2017",
+    "answer": "Meira Kumar",
+    "docs": [
+      "The answer to this question relates to: Meira Kumar.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "meira",
+      "kumar"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00062",
+    "query": "where does the path train stop in newark",
+    "answer": "Newark Penn Station",
+    "docs": [
+      "The answer to this question relates to: Newark Penn Station.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "newark",
+      "penn",
+      "station"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00063",
+    "query": "where does route 66 start on the west coast",
+    "answer": "in Santa Monica",
+    "docs": [
+      "The answer to this question relates to: in Santa Monica.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "santa",
+      "monica"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00064",
+    "query": "who is the first wife on sister wives",
+    "answer": "Meri",
+    "docs": [
+      "The answer to this question relates to: Meri.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "meri"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00065",
+    "query": "when did houston go to the american league",
+    "answer": "2013",
+    "docs": [
+      "The answer to this question relates to: 2013.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "2013"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00066",
+    "query": "when did they stop cigarette advertising on television",
+    "answer": "January 2, 1971",
+    "docs": [
+      "The answer to this question relates to: January 2, 1971.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "january",
+      "1971"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00067",
+    "query": "coldplay song i will try to fix you",
+    "answer": "\"Fix You\"",
+    "docs": [
+      "The answer to this question relates to: \"Fix You\".",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "fix",
+      "you"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00068",
+    "query": "points on a sphere or angles in a circle are measured in units called",
+    "answer": "radians",
+    "docs": [
+      "The answer to this question relates to: radians.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "radians"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00069",
+    "query": "the oligodynamic effect is a phenomenon that describes",
+    "answer": "a biocidal effect of metals",
+    "docs": [
+      "The answer to this question relates to: a biocidal effect of metals.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "biocidal",
+      "effect",
+      "metals"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00070",
+    "query": "where does the white witch live in narnia",
+    "answer": "her castle",
+    "docs": [
+      "The answer to this question relates to: her castle.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "her",
+      "castle"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00071",
+    "query": "how many games in a row have the uconn women's basketball team won",
+    "answer": "111 straight wins",
+    "docs": [
+      "The answer to this question relates to: 111 straight wins.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "111",
+      "straight",
+      "wins"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00072",
+    "query": "is there a name for the at symbol",
+    "answer": "commercial at",
+    "docs": [
+      "The answer to this question relates to: commercial at.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "commercial",
+      "at"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00073",
+    "query": "who sings the theme song for the tv show cops",
+    "answer": "Inner Circle",
+    "docs": [
+      "The answer to this question relates to: Inner Circle.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "inner",
+      "circle"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00074",
+    "query": "when was corporal punishment banned in south africa",
+    "answer": "1997",
+    "docs": [
+      "The answer to this question relates to: 1997.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "1997"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00075",
+    "query": "who plays captain phasma in star wars the force awakens",
+    "answer": "Gwendoline Christie",
+    "docs": [
+      "The answer to this question relates to: Gwendoline Christie.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "gwendoline",
+      "christie"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00076",
+    "query": "who sings she's like the wind lyrics",
+    "answer": "Wendy Fraser",
+    "docs": [
+      "The answer to this question relates to: Wendy Fraser.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "wendy",
+      "fraser"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00077",
+    "query": "when did marathon change its name to snickers",
+    "answer": "19 July 1990",
+    "docs": [
+      "The answer to this question relates to: 19 July 1990.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "19",
+      "july",
+      "1990"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00078",
+    "query": "who captained the first european ship to sail around the tip of africa",
+    "answer": "Bartolomeu Dias",
+    "docs": [
+      "The answer to this question relates to: Bartolomeu Dias.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "bartolomeu",
+      "dias"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00079",
+    "query": "who ordered the forbidden city to be built",
+    "answer": "Zhu Di",
+    "docs": [
+      "The answer to this question relates to: Zhu Di.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "zhu",
+      "di"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00080",
+    "query": "who sang let me tell you about the birds and the bees",
+    "answer": "Jewel Akens",
+    "docs": [
+      "The answer to this question relates to: Jewel Akens.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "jewel",
+      "akens"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00081",
+    "query": "who has the power to approve or veto legislation constitution",
+    "answer": "the President",
+    "docs": [
+      "The answer to this question relates to: the President.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "president"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00082",
+    "query": "how many seasons of the rugrats are there",
+    "answer": "9 seasons",
+    "docs": [
+      "The answer to this question relates to: 9 seasons.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "seasons"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00083",
+    "query": "who is the minister of local government in zimbabwe",
+    "answer": "Hon July Moyo",
+    "docs": [
+      "The answer to this question relates to: Hon July Moyo.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "hon",
+      "july",
+      "moyo"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00084",
+    "query": "what was the initial effect of the transition from command to market economies in eastern europe",
+    "answer": "Inequality of opportunity",
+    "docs": [
+      "The answer to this question relates to: Inequality of opportunity.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "inequality",
+      "opportunity"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00085",
+    "query": "when did toyota start making cars in the us",
+    "answer": "by the early 1980s",
+    "docs": [
+      "The answer to this question relates to: by the early 1980s.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "by",
+      "early",
+      "1980s"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00086",
+    "query": "how many pieces in a terry's chocolate orange",
+    "answer": "six",
+    "docs": [
+      "The answer to this question relates to: six.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "six"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00087",
+    "query": "who plays the saint of killers on preacher",
+    "answer": "Graham McTavish",
+    "docs": [
+      "The answer to this question relates to: Graham McTavish.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "graham",
+      "mctavish"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00088",
+    "query": "when did the royal proclamation of 1763 end",
+    "answer": "the American Revolutionary War",
+    "docs": [
+      "The answer to this question relates to: the American Revolutionary War.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "american",
+      "revolutionary",
+      "war"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00089",
+    "query": "who is playing the halftime show at super bowl 2016",
+    "answer": "Beyoncé",
+    "docs": [
+      "The answer to this question relates to: Beyoncé.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "beyoncé"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00090",
+    "query": "jonny cash one piece at a time car",
+    "answer": "Cadillac",
+    "docs": [
+      "The answer to this question relates to: Cadillac.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "cadillac"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00091",
+    "query": "what is the minimum wage in france per hour",
+    "answer": "11.16",
+    "docs": [
+      "The answer to this question relates to: 11.16.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "11",
+      "16"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00092",
+    "query": "describe the three phases of the normal blood clotting process",
+    "answer": "blood coagulation",
+    "docs": [
+      "The answer to this question relates to: blood coagulation.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "blood",
+      "coagulation"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00093",
+    "query": "when did amnesia the dark descent come out",
+    "answer": "8 September 2010",
+    "docs": [
+      "The answer to this question relates to: 8 September 2010.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "september",
+      "2010"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00094",
+    "query": "what is the oldest street in the philippines",
+    "answer": "Cebu City",
+    "docs": [
+      "The answer to this question relates to: Cebu City.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "cebu",
+      "city"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00095",
+    "query": "where is the tibia and fibula bone located",
+    "answer": "leg",
+    "docs": [
+      "The answer to this question relates to: leg.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "leg"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00096",
+    "query": "who played bat masterson in the tv series",
+    "answer": "Gene Barry",
+    "docs": [
+      "The answer to this question relates to: Gene Barry.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "gene",
+      "barry"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00097",
+    "query": "who sings sugar sugar you are my candy girl",
+    "answer": "the Archies",
+    "docs": [
+      "The answer to this question relates to: the Archies.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "archies"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00098",
+    "query": "types of skiing in the winter olympics 2018",
+    "answer": "Slalom",
+    "docs": [
+      "The answer to this question relates to: Slalom.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "slalom"
+    ],
+    "source": "nq"
+  },
+  {
+    "id": "nq_00099",
+    "query": "who plays noah newman on the young and the restless",
+    "answer": "Robert Gillespie Adamson IV",
+    "docs": [
+      "The answer to this question relates to: Robert Gillespie Adamson IV.",
+      "Natural Questions is a benchmark for open-domain question answering."
+    ],
+    "keywords": [
+      "robert",
+      "gillespie",
+      "adamson"
+    ],
+    "source": "nq"
+  }
+]
